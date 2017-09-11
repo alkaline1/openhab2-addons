@@ -27,6 +27,7 @@ import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
+import org.eclipse.smarthome.core.thing.ThingStatusDetail;
 import org.eclipse.smarthome.core.thing.binding.BaseBridgeHandler;
 import org.eclipse.smarthome.core.thing.binding.ThingHandler;
 import org.eclipse.smarthome.core.types.Command;
@@ -160,9 +161,15 @@ public class iCloudBridgeHandler extends BaseBridgeHandler {
 
                     iCloudData = parser.data;
 
-                    updateBridgeChannels(iCloudData);
-                    updateDevices(iCloudData.getContent());
-                    discoveryService.discover(iCloudData.getContent());
+                    int statusCode = getHttpStatusCode(iCloudData);
+                    if (statusCode == HTTPOK) {
+                        updateBridgeChannels(iCloudData);
+                        updateDevices(iCloudData.getContent());
+                        discoveryService.discover(iCloudData.getContent());
+                    } else {
+                        logger.debug("Communication problem; HTTP status == " + statusCode);
+                        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR);
+                    }
                 } else {
                     updateStatus(ThingStatus.OFFLINE);
                 }
@@ -174,6 +181,10 @@ public class iCloudBridgeHandler extends BaseBridgeHandler {
             }
         }, 0, config.RefreshTimeInMinutes, TimeUnit.MINUTES);
         logger.debug("iCloud bridge handler started.");
+    }
+
+    private int getHttpStatusCode(JSONRootObject iCloudData2) {
+        return Integer.parseUnsignedInt(iCloudData.getStatusCode());
     }
 
     private void registerDeviceDiscoveryService() {
@@ -190,11 +201,9 @@ public class iCloudBridgeHandler extends BaseBridgeHandler {
     private void updateBridgeChannels(JSONRootObject iCloudData) {
         String firstName = iCloudData.getUserInfo().getFirstName();
         String lastName = iCloudData.getUserInfo().getLastName();
-        int httpStatusCode = Integer.parseUnsignedInt(iCloudData.getStatusCode());
 
         updateState(NUMBEROFDEVICES, new DecimalType(iCloudData.getContent().toArray().length));
         updateState(OWNER, new StringType(firstName + " " + lastName));
-        updateState(HTTPSTATUSCODE, new DecimalType(httpStatusCode));
     }
 
     private void logException(Exception exception) {

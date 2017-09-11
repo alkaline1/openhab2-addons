@@ -51,4 +51,7 @@ public class iCloudBindingConstants {
     public static final String ADDRESSCOUNTRY = "AddressCountry";
     public static final String FORMATTEDADDRESS = "FormattedAddress";
 
+    // HTTP Status Code(s)
+    public static final int HTTPOK = 200;
+
 }
