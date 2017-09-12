@@ -9,7 +9,7 @@ The following devices are known to work with this binding:
 * iPhone 6s
 * iPhone 5c
 * iPhone 7
-*	iWatch 2
+* iWatch 2
 * iPad Air 2/2017/Pro
 
 Other devices should work as well. Please provide feedback if you have tested another device type. 
@@ -31,9 +31,10 @@ You can either use the Paper UI or textual configuration in order to link channe
 Paper UI configuration:
 Each device channel must be linked to items. Select “Create new item” to create items.
 
-Example: Device iPhone 6s 
-Channel Battery Status
-	Name: iPhone6s_BatteryStatus
+Example: 
+Device: iPhone 6s 
+Channel: BatteryStatus
+Possible Name: iPhone6s_BatteryStatus
 
 Textual configuration: 
 Items can be prepared to be linked in Paper UI later. Following example shows the first device (device “0”). Exchange “YourDeviceID” with the real device ID as shown in things.
@@ -47,23 +48,21 @@ BatteryStatus = channel
 ## Channels
 
 The following channels are available (if supported by the device):
-Channel ID	          Item Type	      Description
-BatteryStatus	        String	        Battery Status
-Battery Level	        Number	        Battery Level
-FindMyPhone	          Switch	        Find my iPhone 
-Location	            Location	       Location (Latitude/longitude)
-Location Accuracy	    Number	        Location Accuracy
-Distance from Home	  Number	        Distance from Home.5)
-Last Location Update	DateTime	      Last Location Updatevel (PM10)
-Street	              String	        Street
-City	                String	        City
-Country	              String	        Country
-Formatted Address	    String	        Formatted Address
 
+Channel ID
+* BatteryStatus, Type: String
+* Battery Level, Type: Number
+* FindMyPhone, Type: Switch
+* Location, Type: Location
+* Location Accuracy, Type: Number
+* Distance from Home, Type: Number
+* Last Location Update, Type: DateTime
+* Street, Type: String
+* City, Type: String
+* Country, Type: String
+* Formatted Address, Type: String
 
 ## Full Example
-
-Only configuration via paperUI is tested and supported:
 
 1.  Select the binding:  
 ![Select binding](./doc/Config_1.png "Step 1")
@@ -73,6 +72,7 @@ Only configuration via paperUI is tested and supported:
 ![Configure](./doc/Config_3.png "Step 3") 
 
 icloud.items:
+
 String iPhone_Battery_Status "Battery Status [%s]" <battery> (giPhone)	{channel="icloud:device:YourDeviceID:0:BatteryStatus"}
 Number iPhone_Battery_Level "Battery Level [%.0f]" <battery> (giPhone) {channel="icloud:device:YourDeviceID:0:BatteryLevel"}
 Switch Find_my_iPhone_A	"Find iPhone [%s]" <suitcase> (giPhone)	{channel="icloud:device:YourDeviceID:0:FindMyPhone"}
